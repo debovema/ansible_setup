@@ -1,0 +1,19 @@
+---
+# ansible/manifest.yml
+
+# System Settings
+
+system:
+  hostname: "box.local"
+  timezone: "Europe/Paris"
+
+# Enable/Disable Feature Management and Settings
+
+features:
+  gnome_applications:
+    managed: true
+  gnome_shell:
+    managed: true
+  ohmyzsh:
+    managed: true
+...

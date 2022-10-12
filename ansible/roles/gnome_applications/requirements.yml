@@ -1,0 +1,6 @@
+---
+# requirements.yml for gnome_applications
+
+collections:
+  - name: "community.general"
+...

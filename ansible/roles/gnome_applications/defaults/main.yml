@@ -1,0 +1,54 @@
+---
+# defaults/main.yml for gnome_applications
+
+## Package Management
+
+gnome_app_unwanted_package_names:
+  - "gedit"
+  - "gnome-terminal"
+  - "gnome-terminal-nautilus"
+gnome_app_unwanted_package_state: "absent"
+
+gnome_app_media_package_names:
+  - "gtk-v4l"
+gnome_app_media_package_state: "present"
+
+gnome_app_system_package_names:
+  - "tilix"
+  - "tilix-nautilus"
+gnome_app_system_package_state: "present"
+
+dconf_tilix:
+  - key: "/com/gexperts/Tilix/control-scroll-zoom"
+    value: "true"
+  - key: "/com/gexperts/Tilix/copy-on-select"
+    value: "true"
+  - key: "/com/gexperts/Tilix/prompt-on-new-session"
+    value: "'borderless'"
+  - key: "/com/gexperts/Tilix/terminal-title-style"
+    value: "'none'"
+  - key: "/com/gexperts/Tilix/window-style"
+    value: "'borderless'"
+  - key: "/com/gexperts/Tilix/keybindings/app-preferences"
+    value: "'<Primary>comma'"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/background-color"
+    value: "'#263238'"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/badge-color-set"
+    value: "false"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/bold-color-set"
+    value: "false"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/cursor-colors-set"
+    value: "false"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/font"
+    value: "'Monospace 14'"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/foreground-color"
+    value: "'#A1B0B8'"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/highlight-colors-set"
+    value: "false"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/palette"
+    value: "['#252525', '#FF5252', '#C3D82C', '#FFC135', '#42A5F5', '#D81B60', '#00ACC1', '#F5F5F5', '#708284', '#FF5252', '#C3D82C', '#FFC135', '#42A5F5', '#D81B60', '#00ACC1', '#F5F5F5']"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/use-system-font"
+    value: "false"
+  - key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/use-theme-colors"
+    value: "false"
+...

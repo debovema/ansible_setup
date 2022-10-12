@@ -1,0 +1,47 @@
+---
+# tasks/main.yml for gnome_applications
+
+## Package Management
+
+- name: "Remove unwanted application Packages"
+  ansible.builtin.package:
+    name: "{{ gnome_app_unwanted_package_names }}"
+    state: "{{ gnome_app_unwanted_package_state }}"
+  become: true
+  tags:
+    - "gnome"
+    - "removal"
+    - "package"
+
+- name: "Manage media Packages"
+  ansible.builtin.package:
+    name: "{{ gnome_app_media_package_names }}"
+    state: "{{ gnome_app_media_package_state }}"
+  become: true
+  tags:
+    - "gnome"
+    - "media"
+    - "package"
+
+- name: "Manage system Packages"
+  ansible.builtin.package:
+    name: "{{ gnome_app_system_package_names }}"
+    state: "{{ gnome_app_system_package_state }}"
+  become: true
+  tags:
+    - "gnome"
+    - "system"
+    - "package"
+
+- name: "Manage Tilix config"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+    state: "present"
+  loop: "{{ dconf_tilix }}"
+  tags:
+    - "gnome"
+    - "shell"
+    - "keyboard"
+    - "configuration"
+...

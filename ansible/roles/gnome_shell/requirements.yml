@@ -1,0 +1,6 @@
+---
+# requirements.yml for gnome_shell
+
+collections:
+  - name: "ansible.posix"
+...

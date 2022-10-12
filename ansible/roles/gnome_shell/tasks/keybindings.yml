@@ -1,0 +1,13 @@
+---
+# tasks/keybindings.yml for gnome_shell
+
+- name: "Show Desktop Shortcut"
+  community.general.dconf:
+    key: "/org/gnome/desktop/wm/keybindings/show-desktop"
+    value: "['<Super>D']"
+    state: "present"
+  tags:
+    - "gnome"
+    - "shell"
+    - "keyboard"
+    - "configuration"

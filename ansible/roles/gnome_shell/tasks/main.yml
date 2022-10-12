@@ -1,0 +1,17 @@
+---
+# tasks/main.yml for gnome_shell
+
+## Dependency Management
+
+- name: "Import dependencies Tasks"
+  ansible.builtin.import_tasks: "dependency.yml"
+
+## Package Management
+
+- name: "Import shell Tasks"
+  ansible.builtin.import_tasks: "shell.yml"
+
+## Configuration Management
+
+- name: "Import Keybinding Tasks"
+  ansible.builtin.import_tasks: "keybindings.yml"
