@@ -1,0 +1,97 @@
+# Usage:
+  # ansible.builtin.include_tasks: _gnome-shell_extension.yml
+  # loop:
+  #   - { name: "Display Name", 
+  #       flag: flag_from_host_var_file,
+  #       src: source url to download from,
+  #       uuid: uuid to enable or disable,
+  #       state: "present" to enable, "absent" to disable }
+
+- name: "gnome | extension | {{ extension_item.name }} | Get list of enabled extensions"
+  tags: gnome,extension,{{ extension_item.flag }}
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    state: read
+  register: enabled_extensions
+  changed_when: no
+
+- name: "gnome | extension | {{ extension_item.name }} | Get list of disabled extensions"
+  tags: gnome,extension,{{ extension_item.flag }}
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    state: read
+  register: disabled_extensions
+  changed_when: no
+
+- name: "gnome | extension | {{ extension_item.name }} | Enabling | Remove from list of disabled extensions"
+  tags: "gnome,extension,{{ extension_item.flag }}"
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    # var.value may contain:
+    # - @as []
+    # or:
+    # - ['abc', 'def']
+    # Identical to "add to ...". Difference: use "difference()" filter to remove element
+    value: "{{ ('[' + ((disabled_extensions.value | regex_replace('(?:]|(?:@as )?[,[])', '') | split(' ') | difference([\"'\" + extension_item.uuid + \"'\"])) | sort | unique | join(',')) + ']') | replace('[,', '[') | replace('[]', '@as []') | string }}"
+    state: present
+  when:
+    # should it be enabled? (ie. value = present)
+    - extension_item.flag == "present"
+    # only try to remove from disabled extensions, if uuid is in the list 
+    # -> don't do anything, if there's nothing to be done.
+    - disabled_extensions.value and extension_item.uuid in disabled_extensions.value
+
+- name: "gnome | extension | {{ extension_item.name }} | Enabling | Add to list of enabled extensions"
+  tags: gnome,extension,{{ extension_item.flag }}
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    # var.value may contain:
+    # - @as []
+    # or:
+    # - ['abc', 'def']
+    # Add "'foobar'" as element to this list.
+    # - First remove "[", "]", "," and "@as "
+    # - Then convert string to array, splitting on " " (space)
+    # - Add "'foobar'" to the list
+    # - Sort the list
+    # - Make it unique
+    # - Convert list to string, with "," as seperator
+    # - Add '[' and ']' as prefix/suffix
+    # - Convert result to string, so that there's no
+    #   implicit conversion from list to string
+    value: "{{ ('[' + ((enabled_extensions.value | regex_replace('(?:]|(?:@as )?[,[])', '') | split(' ') + [\"'\" + extension_item.uuid + \"'\"]) | sort | unique | join(',')) + ']') | replace(',None', '') | replace('None,', '') | replace('[,', '[') | string }}"
+    state: present
+  when:
+    # should it be enabled? (ie. value = present)
+    - extension_item.flag == "present"
+    # only try to add it to enabled extensions, if uuid is already in the list 
+    # -> don't do anything, if there's nothing to be done.
+    - not enabled_extensions.value or (extension_item.uuid not in enabled_extensions.value)
+
+- name: "gnome | extension | {{ extension_item.name }} | Disabling | Remove from list of enabled extensions"
+  tags: gnome,extension,{{ extension_item.flag }}
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    # Explanation: See above.
+    value: "{{ ('[' + ((enabled_extensions.value | regex_replace('(?:]|(?:@as )?[,[])', '') | split(' ') | difference([\"'\" + extension_item.uuid+ \"'\"])) | sort | unique | join(',')) + ']') | replace('[,', '[') | replace('[]', '@as []') | string }}"
+    state: present
+  when:
+    # should it be disabled? (ie. value = absent)
+    - extension_item.flag == "absent"
+    # only try to remove from disabled extensions, if uuid is in the list 
+    # -> don't do anything, if there's nothing to be done.
+    - enabled_extensions.value and extension_item.uuid in enabled_extensions.value
+
+- name: "gnome | extension | {{ extension_item.name }} | Disabling | Add to list of disabled extensions"
+  tags: gnome,extension,{{ extension_item.flag }}
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    # Explanation: See above.
+    value: "{{ ('[' + ((disabled_extensions.value | regex_replace('(?:]|(?:@as )?[,[])', '') | split(' ') + [\"'\" + extension_item.uuid + \"'\"]) | sort | unique | join(',')) + ']') | replace(',None', '') | replace('None,', '') | replace('[,', '[') | string }}"
+    state: present
+  when:
+    # should it be disabled? (ie. value = absent)
+    - extension_item.flag == "absent"
+    # only try to add it to enabled extensions, if uuid is already in the list 
+    # -> don't do anything, if there's nothing to be done.
+    - not disabled_extensions.value or (extension_item.uuid not in disabled_extensions.value)

@@ -7,6 +7,8 @@ gnome_shell_dependency_package_names:
   - "psutils"
   - "python-psutil"
   - "fedora-workstation-backgrounds"
+  - "dconf-editor"
+  - "gnome-extensions-app"
 gnome_shell_dependency_package_state: "present"
 
 ## Package Management
@@ -27,4 +29,8 @@ gnome_shell_unwanted_package_state: "absent"
 gnome_shell_night_light_enabled: "true"
 gnome_shell_night_light_schedule: "true"
 gnome_shell_touchpad_tap_to_click: "true"
+
+## Gnome extensions
+gnome_extension_ids:
+  - 1160 # Dash to panel
 ...
