@@ -17,3 +17,8 @@
         name: "gnome_shell"
       when:
         - "features.gnome_shell.managed | bool | default (false)"
+    - name: "Import Oh My Zsh Role"
+      ansible.builtin.import_role:
+        name: "gantsign.oh-my-zsh"
+      when:
+        - "features.ohmyzsh.managed | bool | default (false)"

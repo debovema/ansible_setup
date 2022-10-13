@@ -3,5 +3,6 @@ collections:
   - name: "ansible.posix"
   - name: "community.general"
 
-roles: []
+roles:
+  - name: "gantsign.oh-my-zsh"
 ...

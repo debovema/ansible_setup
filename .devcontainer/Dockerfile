@@ -8,11 +8,11 @@ FROM quay.io/fedora/python-310
 #    && rm -rf /tmp/pip-tmp
 
 USER root
+ENV HOME=/root
 
 # [Optional] Uncomment this section to install additional OS packages.
 RUN dnf groupinstall "Fedora Workstation" -y
-RUN dnf install ansible zsh -y
-RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN dnf install ansible python3-psutil xeyes -y
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
