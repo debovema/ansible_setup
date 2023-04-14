@@ -22,3 +22,8 @@
         name: "gantsign.oh-my-zsh"
       when:
         - "features.ohmyzsh.managed | bool | default (false)"
+    - name: "Import Docker Role"
+      ansible.builtin.import_role:
+        name: "geerlingguy.docker"
+      when:
+        - "features.docker.managed | bool | default (false)"

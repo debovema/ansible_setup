@@ -7,6 +7,15 @@ system:
   hostname: "box.local" # for server only
   timezone: "Europe/Paris"
 
+# Users
+
+users:
+  - username: root
+#  - username: johndoe
+#    sudoernopassword: true
+#    ssh_authorized_keys: https://github.com/johndoe.keys
+#    docker: true
+
 # Enable/Disable Feature Management and Settings
 
 features:
@@ -16,14 +25,16 @@ features:
     managed: true
   ohmyzsh:
     managed: true
+  docker:
+    managed: false
 
 # Oh My Zsh
 oh_my_zsh_theme: ys
 oh_my_zsh_install: yes
 
-users:
-  - username: root
-#  - username: johndoe
-#    sudoernopassword: true
-#    ssh_authorized_keys: https://github.com/johndoe.keys
+# Docker
+docker_edition: 'ce'
+docker_users: "{{ users | selectattr('docker', 'defined') | selectattr('docker', 'equalto', true) | map(attribute='username') | list }}"
+docker_install_compose_plugin: true
+docker_install_compose: false
 ...
