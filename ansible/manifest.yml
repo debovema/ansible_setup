@@ -4,25 +4,25 @@
 # System Settings
 
 system:
-  hostname: "box.local"
+  hostname: "box.local" # for server only
   timezone: "Europe/Paris"
 
 # Enable/Disable Feature Management and Settings
 
 features:
-  gnome_applications:
+  gnome_applications: # for workstation only
     managed: true
-  gnome_shell:
+  gnome_shell: # for workstation only
     managed: true
   ohmyzsh:
     managed: true
 
-users:
-  - name: john
-
 # Oh My Zsh
 oh_my_zsh_theme: ys
 oh_my_zsh_install: yes
+
 users:
   - username: root
+#  - username: johndoe
+#    sudoernopassword: true
 ...

@@ -7,13 +7,24 @@
   vars_files:
     - "../manifest.yml"
   tasks:
+    - name: Make sure we have a 'wheel' group
+      ansible.builtin.group:
+        name: wheel
+        state: present
+    - name: Allow 'wheel' group to have passwordless sudo
+      ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: visudo -cf %s
     - name: "Create users"
       ansible.builtin.user:
-        name: "{{ item.name }}"
+        name: "{{ item.username }}"
+        groups: "{{ 'wheel' if item.sudoernopassword is true }}"
         state: present
       loop: "{{ users }}"
-      when:
-        - "users is defined and users.length > 0"
+      when: "users is iterable"
     - name: "Set hostname"
       ansible.builtin.hostname:
         name: "{{ system.hostname }}"
