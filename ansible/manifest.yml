@@ -25,4 +25,5 @@ users:
   - username: root
 #  - username: johndoe
 #    sudoernopassword: true
+#    ssh_authorized_keys: https://github.com/johndoe.keys
 ...

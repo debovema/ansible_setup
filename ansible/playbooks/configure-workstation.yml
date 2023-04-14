@@ -1,7 +1,7 @@
 ---
 # ansible/playbooks/configure.yml
 
-- name: "Configure Fedora Workstation"
+- name: "Configure Workstation"
   hosts: "localhost"
   connection: "local"
   vars_files:

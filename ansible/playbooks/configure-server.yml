@@ -1,7 +1,7 @@
 ---
 # ansible/playbooks/configure.yml
 
-- name: "Configure Fedora Workstation"
+- name: "Configure Server"
   hosts: "localhost"
   connection: "local"
   vars_files:
@@ -24,6 +24,13 @@
         groups: "{{ 'wheel' if item.sudoernopassword is true }}"
         state: present
       loop: "{{ users }}"
+      when: "users is iterable"
+    - name: "Add SSH authorized keys"
+      ansible.posix.authorized_key:
+        user: "{{ item.username }}"
+        state: present
+        key: "{{ item.ssh_authorized_keys }}"
+      loop: "{{ users | selectattr('ssh_authorized_keys', 'defined') }}"
       when: "users is iterable"
     - name: "Set hostname"
       ansible.builtin.hostname:
