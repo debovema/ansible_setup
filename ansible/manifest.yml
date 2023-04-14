@@ -17,6 +17,9 @@ features:
   ohmyzsh:
     managed: true
 
+users:
+  - name: john
+
 # Oh My Zsh
 oh_my_zsh_theme: ys
 oh_my_zsh_install: yes

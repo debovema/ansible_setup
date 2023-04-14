@@ -9,14 +9,20 @@ The playbook is designed to be used on a localhost via `ansible-playbook`.
 
 ### Requirements
 
-* a Fedora Workstation installation
+* a RH-based workstation or server / a Debian-based workstation or server
 * Ansible
 * Python 3 psutil package
 
 #### Ansible & Python 3 psutil
 
+RH-based:
 ```shell
 $ sudo dnf install ansible python3-psutil -y
+```
+
+Debian-based:
+```shell
+$ sudo apt update && sudo apt install ansible python3-psutil -y
 ```
 
 #### Roles and Collections
@@ -61,13 +67,25 @@ Now you are ready to execute the playbook. Be aware, that this will run for
 quite some time, remove packages, download packages and configure a couple of
 services.
 
+Workstation:
 ```shell
 # Check run and show diffs
-$ ansible-playbook --check --diff -K ansible/playbooks/configure.yml
+$ ansible-playbook --check --diff -K ansible/playbooks/configure-workstation.yml
 
 # Execute the playbook
-$ ansible-playbook -K ansible/playbooks/configure.yml
+$ ansible-playbook -K ansible/playbooks/configure-workstation.yml
 ```
+
+Server:
+```shell
+# Check run and show diffs
+$ ansible-playbook --check --diff -K ansible/playbooks/configure-server.yml
+
+# Execute the playbook
+$ ansible-playbook -K ansible/playbooks/configure-server.yml
+```
+
+> *-K* switch can be omitted if running as root
 
 It is a good idea to restart your machine afterwards to ensure that everything
 is working and configured as expected.
