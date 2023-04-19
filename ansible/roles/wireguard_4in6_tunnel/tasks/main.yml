@@ -1,0 +1,24 @@
+- name: "Add wireguard package"
+  ansible.builtin.package:
+    name:
+      - wireguard
+      - wireguard-tools
+      - resolvconf
+    state: present
+    update_cache: true
+  become: true
+
+- name: "Copy wireguard client config"
+  ansible.builtin.copy:
+    src: files/wgclient.conf
+    dest: /etc/wireguard/4in6tunnel.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "Enable and start wireguard 4in6 tunnel service"
+  ansible.builtin.systemd:
+    name: wg-quick@4in6tunnel
+    state: started
+    daemon_reload: true
+    enabled: true

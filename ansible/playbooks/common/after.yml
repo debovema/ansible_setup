@@ -1,0 +1,23 @@
+---
+- name: "Common configuration"
+  hosts: "{{ hosts_group | default('all') }}"
+  vars:
+    docker_edition: 'ce'
+    docker_users: "{{ users | selectattr('docker', 'defined') | selectattr('docker', 'equalto', true) | map(attribute='username') | list }}"
+    docker_install_compose_plugin: true
+    docker_install_compose: false
+  tasks:
+    - name: "Import variables"
+      ansible.builtin.include_vars:
+        file: "../../manifest.yml"
+      when: "hosts_group is defined and hosts_group == 'localhost'"
+    - name: "Import Oh My Zsh Role"
+      ansible.builtin.import_role:
+        name: "gantsign.oh-my-zsh"
+      when:
+        - "ohmyzsh_managed | default(false) | bool"
+    - name: "Import Docker Role"
+      ansible.builtin.import_role:
+        name: "geerlingguy.docker"
+      when:
+        - "docker_managed | default(false) | bool"

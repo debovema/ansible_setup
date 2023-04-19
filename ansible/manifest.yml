@@ -1,13 +1,5 @@
 ---
-# ansible/manifest.yml
-
-# System Settings
-
-system:
-  hostname: "box.local" # for server only
-  timezone: "Europe/Paris"
-
-# Users
+timezone: "Europe/Berlin"
 
 users:
   - username: root
@@ -17,16 +9,10 @@ users:
 #    docker: true
 
 # Enable/Disable Feature Management and Settings
-
-features:
-  gnome_applications: # for workstation only
-    managed: true
-  gnome_shell: # for workstation only
-    managed: true
-  ohmyzsh:
-    managed: true
-  docker:
-    managed: false
+gnome_applications_managed: false
+gnome_shell_managed: false
+ohmyzsh_managed: true
+docker_managed: false
 
 # Oh My Zsh
 oh_my_zsh_theme: ys

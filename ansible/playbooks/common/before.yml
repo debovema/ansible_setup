@@ -1,0 +1,16 @@
+---
+- name: "Common configuration"
+  hosts: "{{ hosts_group | default('all') }}"
+  tasks:
+    - name: "Update apt cache"
+      ansible.builtin.apt:
+        update_cache: true
+      when: ansible_pkg_mgr == "apt"
+    - name: "Import variables"
+      ansible.builtin.include_vars:
+        file: "../../manifest.yml"
+      when: "hosts_group is defined and hosts_group == 'localhost'"
+    - name: Set timezone
+      community.general.timezone:
+        name: "{{ timezone }}"
+      when: "timezone is defined"

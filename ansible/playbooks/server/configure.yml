@@ -1,12 +1,14 @@
 ---
-# ansible/playbooks/configure.yml
-
-- name: "Configure Server"
-  hosts: "localhost"
-  connection: "local"
-  vars_files:
-    - "../manifest.yml"
+- name: "Import common configuration"
+  ansible.builtin.import_playbook: ../common/before.yml
+- name: "Server configuration"
+  hosts: "{{ hosts_group | default('all') }}"
   tasks:
+    - name: "Import Wireguard 6to4 tunnel role"
+      ansible.builtin.import_role:
+        name: "wireguard_4in6_tunnel"
+      when:
+        - "feature_wireguard_4in6_tunnel | default(false) | bool"
     - name: Make sure we have a 'wheel' group
       ansible.builtin.group:
         name: wheel
@@ -24,26 +26,18 @@
         groups: "{{ 'wheel' if item.sudoernopassword is true }}"
         state: present
       loop: "{{ users }}"
-      when: "users is iterable"
+      when: "users is defined and users is iterable"
     - name: "Add SSH authorized keys"
       ansible.posix.authorized_key:
         user: "{{ item.username }}"
         state: present
         key: "{{ item.ssh_authorized_keys }}"
       loop: "{{ users | selectattr('ssh_authorized_keys', 'defined') }}"
-      when: "users is iterable"
+      when: "users is defined and users is iterable"
     - name: "Set hostname"
       ansible.builtin.hostname:
-        name: "{{ system.hostname }}"
+        name: "{{ hostname }}"
       when:
-        - "system.hostname is defined"
-    - name: "Import Oh My Zsh Role"
-      ansible.builtin.import_role:
-        name: "gantsign.oh-my-zsh"
-      when:
-        - "features.ohmyzsh.managed | bool | default (false)"
-    - name: "Import Docker Role"
-      ansible.builtin.import_role:
-        name: "geerlingguy.docker"
-      when:
-        - "features.docker.managed | bool | default (false)"
+        - "hostname is defined"
+- name: "Import common configuration"
+  ansible.builtin.import_playbook: ../common/after.yml

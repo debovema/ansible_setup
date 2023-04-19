@@ -5,7 +5,8 @@ Freely inspired by [dschier-wtd/fedora-workstation](https://github.com/dschier-w
 
 ## Usage
 
-The playbook is designed to be used on a localhost via `ansible-playbook`.
+The playbook is designed to be used on a localhost via `ansible-playbook` for the workstation playbook
+or remotely on hosts from an inventory for the server playbook.
 
 ### Requirements
 
@@ -32,60 +33,63 @@ and collections. This can be done in two simple commands:
 
 ```shell
 # Install collections
-$ ansible-galaxy collection install -r ansible/requirements.yml
+ansible-galaxy collection install -r ansible/requirements.yml
 
 # Install roles
-$ ansible-galaxy role install -r ansible/requirements.yml
+ansible-galaxy role install -r ansible/requirements.yml
 ```
 
 ### Run a Playbook
 
-#### Tuning variables
-
-You can find a [manifest.yml](./ansible/manifest.yml) in the repository. There
-you will find multiple options to configure your desired setup. For now, this
-is quite minimal, but you can also check out the `defaults/main.yml` of each
-role and change the variables via the `manifest.yml`.
-
-```yaml
----
-# ansible/manifest.yml
-
-# System Settings
-
-system:
-  hostname: "box.local"
-  timezone: "Europe/Paris"
-
-# Enable/Disable Feature Management and Settings
-...SNIP...
-```
-
-#### The first run
-
-Now you are ready to execute the playbook. Be aware, that this will run for
-quite some time, remove packages, download packages and configure a couple of
-services.
-
-Workstation:
+#### Workstation
 ```shell
 # Check run and show diffs
-$ ansible-playbook --check --diff -K ansible/playbooks/configure-workstation.yml
+ansible-playbook --check --diff -K ansible/playbooks/workstation/configure.yml -e "hosts_group=localhost"
 
 # Execute the playbook
-$ ansible-playbook -K ansible/playbooks/configure-workstation.yml
+ansible-playbook -K ansible/playbooks/workstation/configure.yml -e "hosts_group=localhost"
 ```
 
-Server:
+#### Server
+
+First create your inventory, for instance:
+
+```shell
+cat > ./inventory.yml <<EOF
+all:
+  vars:
+    ansible_private_key_file: ~/.ssh/id_ed25519 # the key used to connect to the hosts, not the one to authorize for users
+    ansible_user: root
+    hostname: "{{ inventory_hostname }}"
+    timezone: "Europe/Paris"
+
+    # features
+    docker_managed: true
+    ohmyzsh_managed: true
+    oh_my_zsh_theme: ys
+    users:
+      - username: root
+      - username: mathieu
+        ssh_authorized_keys: https://github.com/debovema.keys
+        sudoernopassword: true
+        docker: true
+  children:
+    scaleway:
+      hosts:
+        devno1-3:
+          ansible_host: 163.123.45.67
+    hetzner:
+      hosts:
+        devno1-4:
+          ansible_host: 2a01:4ff:123:456::2
+          feature_wireguard_4in6_tunnel: true
+EOF
+```
+
 ```shell
 # Check run and show diffs
-$ ansible-playbook --check --diff -K ansible/playbooks/configure-server.yml
+ansible-playbook -i inventory.yml --check --diff ansible/playbooks/server/configure.yml
 
 # Execute the playbook
-$ ansible-playbook -K ansible/playbooks/configure-server.yml
+ansible-playbook -i inventory.yml ansible/playbooks/server/configure.yml
 ```
-
-> *-K* switch can be omitted if running as root
-
-It is a good idea to restart your machine afterwards to ensure that everything
-is working and configured as expected.

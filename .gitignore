@@ -1,1 +1,3 @@
 ansible/roles/gantsign.oh-my-zsh/
+ansible/roles/geerlingguy.docker/
+inventory*
