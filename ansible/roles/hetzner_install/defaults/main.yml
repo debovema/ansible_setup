@@ -1,0 +1,2 @@
+hetzner_install_disk_by_id_pattern: ""
+hetzner_install_image: Debian-1202-bookworm-amd64-base.tar.gz

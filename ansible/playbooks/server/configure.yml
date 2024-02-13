@@ -4,6 +4,11 @@
 - name: "Server configuration"
   hosts: "{{ hosts_group | default('all') }}"
   tasks:
+    - name: "Mount additional disks"
+      ansible.builtin.import_role:
+        name: "disk_mount"
+      when:
+        - "disks_to_mount is defined and (disks_to_mount | length > 0)"
     - name: "Import Wireguard 6to4 tunnel role"
       ansible.builtin.import_role:
         name: "wireguard_4in6_tunnel"

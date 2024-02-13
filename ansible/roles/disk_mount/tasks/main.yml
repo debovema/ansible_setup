@@ -1,0 +1,7 @@
+- name: Mount additional disks
+  become: true
+  ansible.builtin.shell:
+    cmd: |
+      mkdir -p {{ item.directory }}
+      find /dev/disk/by-id -name "{{ item.disk_by_ud_pattern }}" -exec sudo  mount {} {{ item.directory }} \;
+  loop: "{{ disks_to_mount }}"

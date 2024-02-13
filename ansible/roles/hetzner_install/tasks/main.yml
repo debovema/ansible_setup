@@ -1,0 +1,12 @@
+- name: Disks where to install the OS
+  ansible.builtin.shell:
+    cmd: readlink -f $(find /dev/disk/by-id/ -name "{{ hetzner_install_disk_by_id_pattern }}") | sed -e 's|[0-9]*$||' | sort | uniq
+  register: os_disks
+- name: Generate Hetzner installimage configuration
+  ansible.builtin.template:
+    mode: "0644"
+    dest: /root/install.conf
+    src: ./templates/install.conf.j2
+- name: Perform installation
+  ansible.builtin.shell:
+    cmd: /root/.oldroot/nfs/install/installimage -a -c /root/install.conf && reboot

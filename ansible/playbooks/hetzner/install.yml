@@ -1,0 +1,6 @@
+- name: "Install OS on Hetzner host (using rescue mode)"
+  hosts: "{{ hosts_group | default('all') }}"
+  tasks:
+    - name: "Import hetzner_install Role"
+      ansible.builtin.import_role:
+        name: "hetzner_install"

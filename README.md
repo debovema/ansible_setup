@@ -63,7 +63,7 @@ all:
     hostname: "{{ inventory_hostname }}"
     timezone: "Europe/Paris"
 
-    # features
+    # Features
     docker_managed: true
     ohmyzsh_managed: true
     oh_my_zsh_theme: ys
@@ -82,6 +82,10 @@ all:
       hosts:
         devno1-4:
           ansible_host: 2a01:4ff:123:456::2
+          # Hetzner rescue mode installation (optional)
+          hetzner_install_disk_by_id_pattern: "*SAMSUNG*"
+          hetzner_install_image: Debian-1202-bookworm-amd64-base.tar.gz
+          # Features
           feature_wireguard_4in6_tunnel: true
 EOF
 ```
@@ -92,4 +96,10 @@ ansible-playbook -i inventory.yml --check --diff ansible/playbooks/server/config
 
 # Execute the playbook
 ansible-playbook -i inventory.yml ansible/playbooks/server/configure.yml
+```
+
+If using Hetzner hosts with rescue mode enabled, install them automatically with this playbook:
+
+```shell
+ansible-playbook -i inventory.yml ansible/playbooks/hetzner/install.yml --limit 'devno1-4'
 ```

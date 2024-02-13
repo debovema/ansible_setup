@@ -1,0 +1,16 @@
+{% for disk in os_disks.stdout_lines %}
+DRIVE{{ loop.index }} {{ disk }}
+{% endfor %}
+
+SWRAID 1
+SWRAIDLEVEL 1
+
+HOSTNAME {{ hostname }}
+
+USE_KERNEL_MODE_SETTING yes
+
+PART swap swap 4G
+PART /boot ext3 1024M
+PART / ext4 all
+
+IMAGE /root/.oldroot/nfs/install/../images/{{ hetzner_install_image }}
