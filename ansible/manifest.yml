@@ -9,10 +9,10 @@ users:
 #    docker: true
 
 # Enable/Disable Feature Management and Settings
-gnome_applications_managed: false
-gnome_shell_managed: false
-ohmyzsh_managed: true
-docker_managed: false
+feature_gnome_applications: false
+feature_gnome_shell: false
+feature_ohmyzsh: true
+feature_docker: false
 
 # Oh My Zsh
 oh_my_zsh_theme: ys

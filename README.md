@@ -59,26 +59,26 @@ cat > ./inventory.yml <<EOF
 all:
   vars:
     ansible_private_key_file: ~/.ssh/id_ed25519 # the key used to connect to the hosts, not the one to authorize for users
-    ansible_user: root
-    hostname: "{{ inventory_hostname }}"
-    timezone: "Europe/Paris"
+    ansible_user: root                          # the user to connect to the hosts to configure them, not the one used to connect to them
+    hostname: "{{ inventory_hostname }}"        # will use the "<hostname>" defined at the "all/children/<group>/hosts/<hostname>" inventory path
+    timezone: "Europe/Paris"                    # the timezone for the server
 
     # Features
-    docker_managed: true
-    ohmyzsh_managed: true
-    oh_my_zsh_theme: ys
-    users:
+    feature_docker: true                        # add Docker packages (users with docker flag will be able to use it)
+    feature_ohmyzsh: true                       # install Oh My Zsh
+    oh_my_zsh_theme: ys                         # the theme for Oh My Zsh
+    users:                                      # users to create (or update) and their configuration
       - username: root
       - username: mathieu
         ssh_authorized_keys: https://github.com/debovema.keys
         sudoernopassword: true
         docker: true
   children:
-    scaleway:
+    scaleway: # a group to categorize your hosts (e.g. the Cloud provider is 'scaleway')
       hosts:
         devno1-3:
           ansible_host: 163.123.45.67
-    hetzner:
+    hetzner: # a group to categorize your hosts (e.g. the Cloud provider is 'hetzner')
       hosts:
         devno1-4:
           ansible_host: 2a01:4ff:123:456::2
@@ -86,7 +86,7 @@ all:
           hetzner_install_disk_by_id_pattern: "*SAMSUNG*"
           hetzner_install_image: Debian-1202-bookworm-amd64-base.tar.gz
           # Features
-          feature_wireguard_4in6_tunnel: true
+          feature_wireguard_4in6_tunnel: true # copy wgclient.conf file in ansible/roles/wireguard_4in6_tunnel/files directory
 EOF
 ```
 

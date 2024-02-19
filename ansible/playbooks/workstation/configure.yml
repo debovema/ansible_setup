@@ -1,7 +1,7 @@
 ---
 - name: "Import common configuration"
   ansible.builtin.import_playbook: ../common/before.yml
-- name: "Configure Workstation"
+- name: "Workstation configuration"
   hosts: "{{ hosts_group | default('all') }}"
   connection: "local"
   vars_files:
@@ -11,11 +11,11 @@
       ansible.builtin.import_role:
         name: "gnome_applications"
       when:
-        - "gnome_applications_managed | default(false) | bool"
+        - "feature_gnome_applications | default(false) | bool"
     - name: "Import gnome_shell Role"
       ansible.builtin.import_role:
         name: "gnome_shell"
       when:
-        - "gnome_shell_managed | default(false) | bool"
+        - "feature_gnome_shell | default(false) | bool"
 - name: "Import common configuration"
   ansible.builtin.import_playbook: ../common/after.yml
