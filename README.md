@@ -5,7 +5,7 @@ Freely inspired by [dschier-wtd/fedora-workstation](https://github.com/dschier-w
 
 ## Usage
 
-The playbook is designed to be used on a localhost via `ansible-playbook` for the workstation playbook
+The playbooks are designed to be used on a localhost via `ansible-playbook` for the workstation playbook
 or remotely on hosts from an inventory for the server playbook.
 
 ### Requirements
@@ -98,8 +98,12 @@ ansible-playbook -i inventory.yml --check --diff ansible/playbooks/server/config
 ansible-playbook -i inventory.yml ansible/playbooks/server/configure.yml
 ```
 
-If using Hetzner hosts with rescue mode enabled, install them automatically with this playbook:
+#### Hetzner server
+
+If using Hetzner hosts with rescue mode enabled, install and configure the hosts automatically:
 
 ```shell
-ansible-playbook -i inventory.yml ansible/playbooks/hetzner/install.yml --limit 'devno1-4'
+ansible-playbook -i inventory.yml ansible/playbooks/hetzner/install.yml ansible/playbooks/server/configure.yml --limit 'hetzner'
 ```
+
+> If a host is not in rescue mode, the installation playbook will be ignored silently

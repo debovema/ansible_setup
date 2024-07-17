@@ -9,4 +9,4 @@
     src: ./templates/install.conf.j2
 - name: Perform installation
   ansible.builtin.shell:
-    cmd: /root/.oldroot/nfs/install/installimage -a -c /root/install.conf && reboot
+    cmd: (/root/.oldroot/nfs/install/installimage -a -c /root/install.conf && reboot) || exit 0
