@@ -1,0 +1,29 @@
+namespace: debovema
+name: box_config
+version: 0.0.1
+readme: README.md
+
+authors:
+- Mathieu Debove <mathieu@debove.dev>
+
+description: Playbooks to configure workstations or servers
+
+license:
+- BSD-3-Clause
+license_file: LICENSE
+
+tags: []
+
+# Collections that this collection requires to be installed for it to be usable. The key of the dict is the
+# collection label 'namespace.name'. The value is a version range
+# L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
+# range specifiers can be set and are separated by ','
+dependencies: {}
+
+repository: https://github.com/debovema/box-config
+documentation: https://galaxy.ansible.com/ui/repo/published/debovema/box-config/docs
+homepage: https://galaxy.ansible.com/ui/repo/published/debovema/box-config
+issues: https://github.com/debovema/box-config/issues
+
+build_ignore:
+- inventory.yml
