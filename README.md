@@ -107,3 +107,26 @@ ansible-playbook -i inventory.yml ansible/playbooks/hetzner/install.yml ansible/
 ```
 
 > If a host is not in rescue mode, the installation playbook will be ignored silently
+
+## Fully remote usage
+
+1. Install this collection and its requirements:
+
+```shell
+ansible-galaxy collection install debovema/ansible_setup
+
+curl https://raw.githubusercontent.com/debovema/box-config/main/ansible/requirements.yml -o /tmp/requirements.yml
+ansible-galaxy install -r /tmp/requirements.yml
+```
+
+2. Retrieve your inventory from a custom Ansible setup inventory repository (for instance: [debovema/ansible_setup_inventory](https://github.com/debovema/ansible_setup_inventory)), created with the [Ansible setup inventory template](https://github.com/debovema/ansible_setup_inventory_template):
+
+```shell
+git clone git@github.com:debovema/ansible_setup_inventory.git ~/.ansible_setup_inventory
+```
+
+3. Execute
+
+```shell
+ansible-playbook debovema.box_config.server.configure -i ~/.ansible_setup_inventory
+```
