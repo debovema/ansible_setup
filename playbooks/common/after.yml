@@ -17,6 +17,7 @@
       when:
         - "feature_ohmyzsh | default(false) | bool"
     - name: "Import Docker Role"
+      become: true
       ansible.builtin.import_role:
         name: "geerlingguy.docker"
       when:
