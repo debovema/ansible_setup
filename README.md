@@ -1,12 +1,13 @@
-# Box configuration
+# Ansible setup
 
-Ansible setup for workstation or server.
+Ansible setup playbooks for workstation or server.
 Freely inspired by [dschier-wtd/fedora-workstation](https://github.com/dschier-wtd/fedora-workstation).
 
 ## Usage
 
-The playbooks are designed to be used on a localhost via `ansible-playbook` for the workstation playbook
-or remotely on hosts from an inventory for the server playbook.
+The playbooks are designed to be used:
+* on a localhost via `ansible-playbook` for the workstation playbook
+* or on remote hosts using an inventory for the server playbooks
 
 ### Requirements
 
