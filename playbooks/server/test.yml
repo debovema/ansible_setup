@@ -1,0 +1,7 @@
+- name: "Server configuration"
+  hosts: "{{ hosts_group | default('all') }}"
+  tasks:
+    - name: Test host is reachable
+      ansible.builtin.debug:
+        msg: >
+          This host can be installed
