@@ -8,8 +8,8 @@ authors:
 
 description: Playbooks to configure workstations or servers
 
-license:
-- BSD-3-Clause
+# license:
+# - BSD-3-Clause
 license_file: LICENSE
 
 tags: []
@@ -20,10 +20,10 @@ tags: []
 # range specifiers can be set and are separated by ','
 dependencies: {}
 
-repository: https://github.com/debovema/ansible-setup
+repository: https://github.com/debovema/ansible_setup
 documentation: https://galaxy.ansible.com/ui/repo/published/debovema/ansible_setup/docs
 homepage: https://galaxy.ansible.com/ui/repo/published/debovema/ansible_setup
-issues: https://github.com/debovema/ansible-setup/issues
+issues: https://github.com/debovema/ansible_setup/issues
 
 build_ignore:
 - inventory.yml

@@ -1,3 +1,4 @@
 ansible/roles/gantsign.oh-my-zsh/
 ansible/roles/geerlingguy.docker/
+debovema-ansible_setup*.tar.gz
 inventory*
