@@ -1,21 +1,29 @@
-- name: "Add wireguard package"
+- name: Set packages to install for Wireguard
+  ansible.builtin.set_fact:
+    wireguard_packages: >-
+      {{ ['wireguard-tools', 'resolvconf'] if ansible_os_family == "Debian" else ['wireguard-tools', 'systemd-resolved'] }}
+  changed_when: false
+- name: Add Wireguard package
   ansible.builtin.package:
-    name:
-      - wireguard-tools
-      - resolvconf
+    name: "{{ wireguard_packages }}"
     state: present
     update_cache: true
   become: true
-
-- name: "Copy wireguard client config"
+- name: Enable systemd-resolved service
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    daemon-reload: true
+    enabled: true
+    state: started
+  when: ansible_os_family != "Debian"
+- name: Copy wireguard client config
   ansible.builtin.copy:
     content: "{{ wg_client_conf }}"
     dest: /etc/wireguard/4in6tunnel.conf
     owner: root
     group: root
     mode: '0644'
-
-- name: "Enable and start wireguard 4in6 tunnel service"
+- name: Enable and start wireguard 4in6 tunnel service
   ansible.builtin.systemd:
     name: wg-quick@4in6tunnel
     state: started

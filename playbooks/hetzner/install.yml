@@ -1,5 +1,7 @@
 - name: "Install OS on Hetzner host (using rescue mode)"
   hosts: "{{ hosts_group | default('all') }}"
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
   tasks:
     - name: "Import hetzner_install Role"
       ansible.builtin.import_role:
