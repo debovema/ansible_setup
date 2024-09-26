@@ -9,7 +9,7 @@
 
 - name: "Copy wireguard client config"
   ansible.builtin.copy:
-    src: files/wgclient.conf
+    content: "{{ wg_client_conf }}"
     dest: /etc/wireguard/4in6tunnel.conf
     owner: root
     group: root

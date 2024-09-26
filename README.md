@@ -6,6 +6,7 @@ Freely inspired by [dschier-wtd/fedora-workstation](https://github.com/dschier-w
 ## Usage
 
 The playbooks are designed to be used:
+
 * on a localhost via `ansible-playbook` for the workstation playbook
 * or on remote hosts using an inventory for the server playbooks
 
@@ -18,11 +19,13 @@ The playbooks are designed to be used:
 #### Ansible & Python 3 psutil
 
 RH-based:
+
 ```shell
 $ sudo dnf install ansible python3-psutil -y
 ```
 
 Debian-based:
+
 ```shell
 $ sudo apt update && sudo apt install ansible python3-psutil -y
 ```
@@ -30,14 +33,10 @@ $ sudo apt update && sudo apt install ansible python3-psutil -y
 #### Roles and Collections
 
 Before running the actual playboook, it is needed to install required roles
-and collections. This can be done in two simple commands:
+and collections. This can be done with a simple command:
 
 ```shell
-# Install collections
-ansible-galaxy collection install -r ansible/requirements.yml
-
-# Install roles
-ansible-galaxy role install -r ansible/requirements.yml
+ansible-galaxy install -r requirements.yml
 ```
 
 ### Run a Playbook
@@ -45,10 +44,10 @@ ansible-galaxy role install -r ansible/requirements.yml
 #### Workstation
 ```shell
 # Check run and show diffs
-ansible-playbook --check --diff -K ansible/playbooks/workstation/configure.yml -e "hosts_group=localhost"
+ansible-playbook --check --diff -K playbooks/workstation/configure.yml -e "hosts_group=localhost"
 
 # Execute the playbook
-ansible-playbook -K ansible/playbooks/workstation/configure.yml -e "hosts_group=localhost"
+ansible-playbook -K playbooks/workstation/configure.yml -e "hosts_group=localhost"
 ```
 
 #### Server
@@ -114,10 +113,8 @@ ansible-playbook -i inventory.yml ansible/playbooks/hetzner/install.yml ansible/
 1. Install this collection and its requirements:
 
 ```shell
-ansible-galaxy collection install debovema/ansible_setup
-
-curl https://raw.githubusercontent.com/debovema/box-config/main/ansible/requirements.yml -o /tmp/requirements.yml
-ansible-galaxy install -r /tmp/requirements.yml
+ansible-galaxy collection install debovema.ansible_setup
+ansible-playbook debovema.ansible_setup.meta.requirements
 ```
 
 2. Retrieve your inventory from a custom Ansible setup inventory repository (for instance: [debovema/ansible_setup_inventory](https://github.com/debovema/ansible_setup_inventory)), created with the [Ansible setup inventory template](https://github.com/debovema/ansible_setup_inventory_template):
@@ -126,8 +123,9 @@ ansible-galaxy install -r /tmp/requirements.yml
 git clone git@github.com:debovema/ansible_setup_inventory.git ~/.ansible_setup_inventory
 ```
 
-3. Execute
+3. Execute the server configuration playbook:
 
 ```shell
-ansible-playbook debovema.box_config.server.configure -i ~/.ansible_setup_inventory
+cd ~/.ansible_setup_inventory
+ansible-playbook debovema.ansible_setup.server.configure all
 ```

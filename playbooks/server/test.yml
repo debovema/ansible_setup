@@ -4,4 +4,4 @@
     - name: Test host is reachable
       ansible.builtin.debug:
         msg: >
-          This host can be installed
+          This host can be configured
