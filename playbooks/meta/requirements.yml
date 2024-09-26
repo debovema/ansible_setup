@@ -1,0 +1,10 @@
+- name: Install requirements
+  hosts: all,localhost
+  gather_facts: false
+  tasks:
+    - name: Install collections and roles from requirements.yml
+      community.general.ansible_galaxy_install:
+        requirements_file: "{{ playbook_dir }}/../../requirements.yml"
+        type: both
+        force: false
+      delegate_to: localhost
