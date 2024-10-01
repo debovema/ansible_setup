@@ -1,7 +1,13 @@
 - name: Install requirements
-  hosts: all,localhost
+  hosts: localhost
   gather_facts: false
   tasks:
+    - name: Install Python modules from requirements.txt
+      ansible.builtin.pip:
+        requirements: "{{ playbook_dir }}/../../requirements.txt"
+        virtualenv: "{{ pip_virtualenv | default(omit) }}"
+        state: present
+      delegate_to: localhost
     - name: Install collections and roles from requirements.yml
       community.general.ansible_galaxy_install:
         requirements_file: "{{ playbook_dir }}/../../requirements.yml"

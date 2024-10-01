@@ -2,8 +2,16 @@
 - name: "Import common configuration"
   ansible.builtin.import_playbook: ../common/before.yml
 - name: "Server configuration"
-  hosts: "{{ hosts_group | default('all') }}"
+  hosts: "{{ hosts_group | default('all') ~ ':!localhost' }}"
   tasks:
+    - name: Add host in SSH config
+      community.general.ssh_config:
+        user: "{{ connection_user }}"
+        host: "{{ hostname }}"
+        hostname: "{{ ansible_host }}"
+        state: present
+      delegate_to: localhost
+      when: connection_user is defined and connection_user | length > 0 and hostname is defined and hostname | length > 0
     - name: "Mount additional disks"
       ansible.builtin.import_role:
         name: "disk_mount"
@@ -45,6 +53,6 @@
       ansible.builtin.hostname:
         name: "{{ hostname }}"
       when:
-        - "hostname is defined"
+        - "hostname is defined and hostname | length > 0"
 - name: "Import common configuration"
   ansible.builtin.import_playbook: ../common/after.yml

@@ -1,5 +1,5 @@
 - name: "Server configuration"
-  hosts: "{{ hosts_group | default('all') }}"
+  hosts: "{{ hosts_group | default('all') ~ ':!localhost' }}"
   tasks:
     - name: Test host is reachable
       ansible.builtin.debug:
