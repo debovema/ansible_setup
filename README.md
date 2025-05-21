@@ -13,21 +13,25 @@ The playbooks are designed to be used:
 ### Requirements
 
 * a RH-based workstation or server / a Debian-based workstation or server
-* Ansible
-* Python 3 psutil package
+* Python 3
 
-#### Ansible & Python 3 psutil
+#### Create a Python virtual environment with Ansible
 
-RH-based:
+To create a Python virtual environment and install Ansible inside, run:
 
 ```shell
-$ sudo dnf install ansible python3-psutil -y
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install ansible
 ```
 
-Debian-based:
+#### Python requirements
+
+To install the required Python packages, run:
 
 ```shell
-$ sudo apt update && sudo apt install ansible python3-psutil -y
+pip install -r requirements.txt
 ```
 
 #### Roles and Collections
@@ -42,12 +46,33 @@ ansible-galaxy install -r requirements.yml
 ### Run a Playbook
 
 #### Workstation
+
+First create your inventory, for instance:
+
+```shell
+cat > ./inventory.yml <<EOF
+all:
+  vars:
+    timezone: "Europe/Paris"                    # the timezone for the workstation
+
+    # Features
+    feature_docker: true                        # add Docker packages (users with docker flag will be able to use it)
+    feature_gnome_applications: true            # install Gnome applications (extensions)
+    feature_gnome_shell: true                   # customize Gnome shell
+    feature_ohmyzsh: true                       # install Oh My Zsh
+    oh_my_zsh_theme: ys                         # the theme for Oh My Zsh
+    users:                                      # users to create (or update) and their configuration
+      - username: root
+      - username: mathieu
+        docker: true
+EOF
+```
+
 ```shell
 # Check run and show diffs
-ansible-playbook --check --diff -K playbooks/workstation/configure.yml -e "hosts_group=localhost"
+ansible-playbook -i inventory.yml --check --diff -K playbooks/workstation/configure.yml -e "hosts_group=localhost"
 
-# Execute the playbook
-ansible-playbook -K playbooks/workstation/configure.yml -e "hosts_group=localhost"
+ansible-playbook -i inventory.yml -K playbooks/workstation/configure.yml -e "hosts_group=localhost"
 ```
 
 #### Server

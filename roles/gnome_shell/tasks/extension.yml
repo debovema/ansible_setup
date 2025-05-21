@@ -35,9 +35,9 @@
     - name: Enable Gnome Shell extension - {{ gnome_extension_info.name }}
       ansible.builtin.include_tasks: _gnome_shell_extension.yml
       loop:
-        - { name: "dash-to-panel",
+        - { name: "{{ gnome_extension_info.name }}",
             flag: "present",
-            uuid: "dash-to-panel@jderose9.github.com" }
+            uuid: "{{ gnome_extension_info.uuid }}" }
       loop_control:
         loop_var: extension_item
   always:

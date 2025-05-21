@@ -4,9 +4,14 @@
 - name: "Workstation configuration"
   hosts: "{{ hosts_group | default('all') }}"
   connection: "local"
-  vars_files:
-    - "../../manifest.yml"
   tasks:
+    - name: Ensure required Python packages are installed
+      ansible.builtin.package:
+        name:
+          - python3-libdnf5
+          - python3-psutil
+        state: present
+      become: yes
     - name: "Import gnome_applications Role"
       ansible.builtin.import_role:
         name: "gnome_applications"
