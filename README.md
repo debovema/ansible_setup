@@ -1,23 +1,20 @@
 # Ansible setup
 
 Ansible setup playbooks for workstation or server.
-Freely inspired by [dschier-wtd/fedora-workstation](https://github.com/dschier-wtd/fedora-workstation).
 
 ## Usage
 
-The playbooks are designed to be used:
-
-* on a localhost via `ansible-playbook` for the workstation playbook
-* or on remote hosts using an inventory for the server playbooks
+The playbooks are designed to be used with an Ansible inventory to target one or several *hosts*
+belonging to one or several *groups*.
 
 ### Requirements
 
-* a RH-based workstation or server / a Debian-based workstation or server
 * Python 3
+* A Python *virtual environment* configured with Ansible and its requirements
 
 #### Create a Python virtual environment with Ansible
 
-To create a Python virtual environment and install Ansible inside, run:
+To create a Python *virtual environment* and install Ansible inside, run:
 
 ```shell
 python3 -m venv .venv
